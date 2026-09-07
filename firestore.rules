@@ -1,0 +1,63 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function ownsTriplexData(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    function validMoney(value) {
+      return value is number && value >= 0 && value <= 100000000;
+    }
+
+    function validSimulation() {
+      return request.resource.data.keys().hasAll([
+          'price', 'entry', 'bank', 'own', 'renovation', 'registry',
+          'family1', 'family2', 'name', 'kind', 'updatedAt'
+        ])
+        && request.resource.data.keys().hasOnly([
+          'price', 'entry', 'bank', 'own', 'renovation', 'registry',
+          'family1', 'family2', 'name', 'kind', 'updatedAt', 'createdAt'
+        ])
+        && validMoney(request.resource.data.price)
+        && request.resource.data.entry is number
+        && request.resource.data.entry >= 0
+        && request.resource.data.entry <= 100
+        && validMoney(request.resource.data.bank)
+        && validMoney(request.resource.data.own)
+        && validMoney(request.resource.data.renovation)
+        && validMoney(request.resource.data.registry)
+        && validMoney(request.resource.data.family1)
+        && validMoney(request.resource.data.family2)
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() <= 80
+        && request.resource.data.updatedAt is timestamp;
+    }
+
+    match /triplexUsers/{userId}/simulations/{simulationId} {
+      allow read: if ownsTriplexData(userId);
+
+      allow create: if ownsTriplexData(userId)
+        && validSimulation()
+        && (
+          (simulationId == 'current'
+            && request.resource.data.kind == 'current'
+            && !('createdAt' in request.resource.data))
+          ||
+          (simulationId != 'current'
+            && request.resource.data.kind == 'saved'
+            && request.resource.data.createdAt is timestamp)
+        );
+
+      allow update: if ownsTriplexData(userId)
+        && simulationId == 'current'
+        && validSimulation()
+        && request.resource.data.kind == 'current'
+        && !('createdAt' in request.resource.data);
+
+      allow delete: if ownsTriplexData(userId) && simulationId != 'current';
+    }
+  }
+}
+
