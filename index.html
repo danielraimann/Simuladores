@@ -1,96 +1,283 @@
-<!doctype html><html lang="pt-BR"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Meu Triplex | Simulador de compra</title><style>
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f4f7fb" />
+    <meta
+      name="description"
+      content="Simulador financeiro para organizar os custos e os recursos da compra do seu triplex."
+    />
+    <title>Meu Triplex | Simulador de compra</title>
+    <link rel="stylesheet" href="styles.css?v=3" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="app-header">
+        <a class="brand" href="#top" aria-label="Meu Triplex, voltar ao início">
+          <span class="brand-mark" aria-hidden="true">▥</span>
+          MEU TRIPLEX
+        </a>
+        <span class="header-copy">Planejamento da compra</span>
+      </header>
 
+      <section class="heading" id="top" aria-labelledby="page-title">
+        <div class="heading-copy">
+          <p class="eyebrow">SEU PRÓXIMO ENDEREÇO, EM NÚMEROS</p>
+          <h1 id="page-title">Planeje seu triplex<span>.</span></h1>
+          <p>Organize cada custo e recurso. O saldo se atualiza na hora.</p>
+        </div>
+        <div class="heading-actions">
+          <span class="save-status" id="save-status" data-state="local" role="status">
+            Salvo neste navegador
+          </span>
+          <button class="button secondary" id="auth" type="button">☁ Entrar</button>
+          <button class="button quiet" id="reset" type="button">↺ Reiniciar</button>
+        </div>
+      </section>
 
+      <div class="workspace">
+        <section class="editor" aria-label="Lançamentos da compra">
+          <article aria-labelledby="purchase-title">
+            <div class="section-heading">
+              <span class="step-number">01</span>
+              <div>
+                <p class="section-kicker">Custos iniciais</p>
+                <h2 id="purchase-title">Compra do imóvel</h2>
+              </div>
+            </div>
+            <div id="purchase-fields"></div>
+            <div class="stage-footer">
+              <div class="stage-metrics">
+                <span>Subtotal da compra</span>
+                <output id="purchase-movement"></output>
+              </div>
+              <div class="stage-metrics emphasis">
+                <span>Saldo após esta etapa</span>
+                <output id="purchase-balance"></output>
+              </div>
+            </div>
+          </article>
 
-:root,.dark{--background:#f3f6fb;--foreground:#192638;--primary:#275de0;--muted:#e5eaf3;--ring:#275de0;--font-sans:Arial,Helvetica,sans-serif;}
-*{box-sizing:border-box}body{margin:0;background:var(--background);color:var(--foreground);font-family:Arial,Helvetica,sans-serif;font-size:16px}main{max-width:1240px;margin:auto;padding:0 40px}header{height:88px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #dce2eb;font-size:14px;color:#647087}.brand{font-size:15px;font-weight:800;letter-spacing:2px;color:#214caa}.heading{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:38px 0 30px}.heading-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}.eyebrow{font-size:12px!important;letter-spacing:1.8px;font-weight:700;color:#55708e!important;margin:0 0 12px!important}h1{font-size:36px;letter-spacing:-1.5px;line-height:1.2;margin:0 0 12px}h1 span{color:#275de0}.heading p{margin:0;color:#66748a;font-size:16px}button{background:white;border:1px solid #d7dfec;border-radius:8px;padding:11px 14px;font-size:14px;color:#46566e;cursor:pointer;white-space:nowrap}button:hover{background:#e9effc}button:disabled{cursor:not-allowed;opacity:.55;background:#f4f6fa}button:focus-visible,input:focus-visible{outline:3px solid #a3bcf9;outline-offset:3px}.save-status{display:inline-flex;align-items:center;gap:7px;border:1px solid #d8e0eb;border-radius:999px;background:#fff;padding:8px 11px;color:#607087;font-size:12px;white-space:nowrap}.save-status::before{content:'';width:7px;height:7px;border-radius:50%;background:#8a98aa}.save-status[data-state=cloud]::before{background:#17a673}.save-status[data-state=pending]::before{background:#e1a630}.save-status[data-state=error]::before{background:#d74b4b}.workspace{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(340px,1fr);gap:28px;align-items:start}article{background:white;border:1px solid #e0e6ef;border-radius:14px;padding:26px 30px;margin-bottom:22px}h2{font-size:18px;font-weight:700;margin:0 0 28px;display:flex;align-items:center;gap:12px}h2>span{color:#275de0;background:#edf2ff;padding:6px;border-radius:5px;font-size:12px}.field{margin:0 0 28px}.field-top{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px}label{font-size:15px;font-weight:600}.number{display:flex;align-items:center;background:#f7f9fd;border:1px solid #dce4f1;border-radius:7px;max-width:176px;padding:9px 11px;gap:7px}.number span{color:#708198;font-size:13px}input{width:112px;min-width:0;text-align:right;background:transparent;border:0;font-size:17px;font-weight:600;color:#192638;font-variant-numeric:tabular-nums}input::-webkit-inner-spin-button{appearance:none}[data-slot=slider-track]{height:6px!important}[data-slot=slider-thumb]{width:18px;height:18px;border:3px solid #275de0;box-shadow:0 2px 5px #163d8220}.range-label{display:flex;justify-content:space-between;gap:10px;font-size:12px;color:#6a788d;margin-top:12px}.note{background:#f0f5ff;padding:14px;border-radius:8px;color:#476084;font-size:14px;line-height:1.6}.scenario-intro{margin:-8px 0 18px;color:#617089;font-size:14px;line-height:1.55}.auth-form{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:10px;margin:0 0 18px}.auth-form[hidden]{display:none}.auth-form input,.scenario-form .scenario-name{width:100%;text-align:left;background:#f7f9fd;border:1px solid #dce4f1;border-radius:8px;padding:11px 12px;font-size:14px;font-weight:500}.auth-form button,.scenario-form button{background:#275de0;border-color:#275de0;color:white}.auth-form button:hover,.scenario-form button:hover{background:#204ebd}.auth-error{margin:-8px 0 18px;color:#b93737;font-size:13px}.auth-error[hidden]{display:none}.scenario-form{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;margin-bottom:18px}.scenario-list{display:grid;gap:10px}.scenario-empty{margin:0;border:1px dashed #ccd6e5;border-radius:9px;padding:16px;color:#758399;font-size:13px;text-align:center}.scenario-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid #e0e6ef;border-radius:9px;padding:12px}.scenario-name-text{display:block;overflow:hidden;text-overflow:ellipsis;font-size:14px}.scenario-meta{display:block;margin-top:4px;color:#718096;font-size:12px}.scenario-actions{display:flex;gap:7px}.scenario-actions button{padding:8px 10px;font-size:12px}.scenario-actions .danger{color:#b93737}aside{position:sticky;top:24px}.summary{background:#122b50;border-radius:16px;padding:28px;color:#fff}.summary-top{display:flex;justify-content:space-between;align-items:center;color:#a8c6fc;font-size:12px;letter-spacing:1.8px;font-weight:700}.summary-top span{font-size:24px}.result-label{margin:26px 0 10px;color:#d2dff4;font-size:15px}.hero-number{font-size:38px;letter-spacing:-1.5px;font-weight:700;font-variant-numeric:tabular-nums}.result-help{font-size:14px;line-height:1.6;color:#b7c8e1;margin:12px 0 22px}.rule{height:1px;background:#ffffff20;margin:20px 0}.line{display:flex;justify-content:space-between;gap:10px;margin:14px 0;font-size:14px;color:#c6d4e9}.line strong{color:white;font-weight:500;font-variant-numeric:tabular-nums}.total{font-size:16px}.total strong{font-weight:700}.balance{margin-top:24px;padding:20px;border:1px solid #5676a2;background:#ffffff08;border-radius:9px;display:flex;flex-direction:column;gap:8px}.balance>span{font-size:14px;color:#c7d8f0}.balance strong{font-size:28px}.balance small{font-size:12px;color:#b7c8e1}.composition{padding:25px 4px 10px}.composition h2{font-size:16px;margin-bottom:18px}.stack{display:flex;height:12px;border-radius:8px;overflow:hidden;background:#dce2ec;margin-bottom:20px}.stack>div{transition:flex .15s}.legend{display:flex;justify-content:space-between;font-size:14px;gap:10px;margin:13px 0;color:#53637a}.legend>span{display:flex;align-items:center;gap:8px}.legend i{width:8px;height:8px;border-radius:50%}.legend strong{font-weight:500;color:#283c56}.share-actions{margin-top:14px}.share-button{width:100%;min-height:48px;background:#075e54;border-color:#075e54;color:#fff;font-size:14px;font-weight:700}.share-button:hover{background:#064e47}.share-button:disabled{background:#557c77;border-color:#557c77;color:#fff}.share-feedback{min-height:18px;margin:8px 2px 0;color:#5e6e84;font-size:12px;line-height:1.5}.share-feedback:empty{margin-top:0}.share-export-stage .stack>div{transition:none!important}.footnote{font-size:12px;line-height:1.65;color:#68758a}footer{border-top:1px solid #dce2eb;padding:24px 0 30px;margin-top:12px;font-size:12px;font-weight:700;letter-spacing:1px;color:#6e7e93;display:flex;justify-content:space-between}footer span{font-weight:400;letter-spacing:0}@media(max-width:1000px){main{padding:0 22px}.workspace{grid-template-columns:1fr 1fr;gap:18px}article{padding:22px 18px}.field-top{flex-wrap:wrap}.summary{padding:22px}.hero-number{font-size:30px}h1{font-size:30px}}@media(max-width:700px){main{padding:0 18px}header{height:70px}header>span{display:none}.heading{align-items:flex-start;padding:28px 0;flex-direction:column}.heading-actions{width:100%;justify-content:flex-start}h1{font-size:32px}.workspace{grid-template-columns:1fr}aside{position:static}.field-top{flex-wrap:wrap}label{font-size:14px}.number{max-width:154px}input{width:97px;font-size:16px}.hero-number{font-size:36px}.summary{padding:26px}.auth-form,.scenario-form{grid-template-columns:1fr}.scenario-item{grid-template-columns:1fr}.scenario-actions{justify-content:flex-end}footer{gap:14px;flex-wrap:wrap}}
+          <article aria-labelledby="renovation-title">
+            <div class="section-heading">
+              <span class="step-number">02</span>
+              <div>
+                <p class="section-kicker">Preparação do novo lar</p>
+                <h2 id="renovation-title">Reforma</h2>
+              </div>
+            </div>
+            <div id="renovation-fields"></div>
+            <div class="stage-footer">
+              <div class="stage-metrics">
+                <span>Despesa desta etapa</span>
+                <output id="renovation-movement"></output>
+              </div>
+              <div class="stage-metrics emphasis">
+                <span>Saldo acumulado</span>
+                <output id="renovation-balance"></output>
+              </div>
+            </div>
+          </article>
 
+          <article aria-labelledby="resources-title">
+            <div class="section-heading">
+              <span class="step-number">03</span>
+              <div>
+                <p class="section-kicker">Dinheiro para a compra</p>
+                <h2 id="resources-title">Recursos disponíveis</h2>
+              </div>
+            </div>
+            <p class="section-intro">
+              Financiamentos e empréstimos entram como crédito nesta compra, mesmo quando geram parcelas futuras.
+            </p>
+            <div id="resource-fields"></div>
+            <div class="stage-footer">
+              <div class="stage-metrics">
+                <span>Recursos desta etapa</span>
+                <output id="resources-movement"></output>
+              </div>
+              <div class="stage-metrics emphasis">
+                <span>Saldo após os recursos</span>
+                <output id="resources-balance"></output>
+              </div>
+            </div>
+          </article>
 
-input[type=range]{width:100%;height:20px;accent-color:#275de0;cursor:pointer}.field-top input{width:112px}output{display:block}</style><main><header><div class="brand">▥ &nbsp; MEU TRIPLEX</div><span>Planejamento da compra</span></header><div class="heading"><div><p class="eyebrow">SEU PRÓXIMO ENDEREÇO, EM NÚMEROS</p><h1>Faça as contas do seu triplex<span>.</span></h1><p>Ajuste os valores e descubra quanto precisa investir.</p></div><div class="heading-actions"><span class="save-status" id="save-status" data-state="local" role="status">Salvo neste navegador</span><button id="auth">☁ Entrar</button><button id="reset">↺ Reiniciar</button></div></div><div class="workspace"><section><article><h2><span>01</span> Compra do apartamento</h2><div id="purchase"></div><div class="note" id="note"></div></article><article><h2><span>02</span> Reforma, cartório e recursos</h2><div id="resources"></div></article><article><h2><span>03</span> Cenários salvos</h2><p class="scenario-intro" id="cloud-help">Entre com sua conta para salvar cenários no Firebase e acessá-los em outros aparelhos.</p><div class="auth-form" id="auth-form"><input id="login-email" type="email" autocomplete="username" placeholder="E-mail" aria-label="E-mail"><input id="login-password" type="password" autocomplete="current-password" placeholder="Senha" aria-label="Senha"><button id="login" type="button">Entrar</button></div><p class="auth-error" id="auth-error" role="alert" hidden></p><div class="scenario-form"><input class="scenario-name" id="scenario-name" maxlength="80" placeholder="Nome do cenário, por exemplo: Proposta final" aria-label="Nome do cenário"><button id="save-scenario" disabled>Salvar cenário</button></div><div class="scenario-list" id="scenario-list"><p class="scenario-empty">Seus cenários aparecerão aqui.</p></div></article></section><aside><div id="share-report" class="share-report" aria-label="Resumo financeiro do cenário"><div class="summary" aria-live="polite"><div class="summary-top">SEU CENÁRIO <span>↗</span></div><p class="result-label">Recursos próprios necessários</p><output class="hero-number" id="required"></output><p class="result-help">Para comprar, reformar e pagar o cartório, após descontar o banco e os empréstimos de parentes.</p><div class="rule"></div><div id="breakdown"></div><div class="balance"><span id="balance-label"></span><strong id="balance"></strong><small id="available"></small></div></div><div class="composition"><h2>De onde vem o dinheiro</h2><div class="stack" id="stack" aria-label="Composição dos recursos"></div><div id="legend"></div></div></div><div class="share-actions"><button class="share-button" id="share-whatsapp" type="button" aria-describedby="share-feedback">Compartilhar imagem no WhatsApp</button><p class="share-feedback" id="share-feedback" role="status" aria-live="polite"></p></div><p class="footnote">Empréstimos de parentes são dívidas a devolver. A conta não inclui juros, parcelas, impostos ou outras despesas. As alterações são salvas neste navegador e, após o login, também no Firebase.</p></aside></div><footer>MEU TRIPLEX <span>Simule hoje. Planeje o próximo passo.</span></footer></main><script src="firebase-config.js"></script><script>
-const initial={price:735000,entry:20,bank:551500,own:0,renovation:0,registry:0,family1:0,family2:0};
-const fields=[['price','Valor do apartamento',1500000],['bank','Financiamento do banco',1500000],['renovation','Valor necessário para reforma',300000],['registry','Custos de cartório',100000],['own','Recursos próprios disponíveis',500000],['family1','Empréstimo de parentes 1',300000],['family2','Empréstimo de parentes 2',300000]];
-const colors=['#275de0','#17a99c','#9bb6fc','#dce2ec'];
-const localKey='meu-triplex:calculo-atual:v2';
-const localMetaKey='meu-triplex:sincronizacao:v1';
-const sdkVersion='12.18.0';
-const saveStatus=document.getElementById('save-status');
-const authButton=document.getElementById('auth');
-const authForm=document.getElementById('auth-form');
-const loginEmail=document.getElementById('login-email');
-const loginPassword=document.getElementById('login-password');
-const loginButton=document.getElementById('login');
-const authError=document.getElementById('auth-error');
-const cloudHelp=document.getElementById('cloud-help');
-const scenarioName=document.getElementById('scenario-name');
-const saveScenarioButton=document.getElementById('save-scenario');
-const scenarioList=document.getElementById('scenario-list');
-const shareReport=document.getElementById('share-report');
-const shareButton=document.getElementById('share-whatsapp');
-const shareFeedback=document.getElementById('share-feedback');
-let firebaseApi=null,currentUser=null,saveTimer=null,firebaseStarting=false;
-let scenarioCache=new Map();
-let html2CanvasPromise=null;
+          <article aria-labelledby="sale-title">
+            <div class="section-heading">
+              <span class="step-number">04</span>
+              <div>
+                <p class="section-kicker">Venda de outro imóvel</p>
+                <h2 id="sale-title">Entrada e corretagem</h2>
+              </div>
+            </div>
+            <p class="section-intro">
+              Informe o valor recebido e a despesa da venda. Deixe em zero quando não se aplicar.
+            </p>
+            <div id="sale-fields"></div>
+            <div class="stage-footer">
+              <div class="stage-metrics">
+                <span>Movimento desta etapa</span>
+                <output id="sale-movement"></output>
+              </div>
+              <div class="stage-metrics emphasis">
+                <span>Saldo acumulado</span>
+                <output id="sale-balance"></output>
+              </div>
+            </div>
+          </article>
 
-const money=n=>n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
-const clampValue=(key,value)=>Math.max(0,Math.min(key==='entry'?100:1e8,value));
-function normalizeValues(source){const result={...initial};for(const key of Object.keys(initial)){const number=Number(source?.[key]);if(Number.isFinite(number))result[key]=clampValue(key,number);}return result;}
-function readLocal(){try{const saved=JSON.parse(localStorage.getItem(localKey));return saved?normalizeValues(saved):{...initial};}catch{return {...initial};}}
-function readLocalMeta(){try{const saved=JSON.parse(localStorage.getItem(localMetaKey));return {editedAt:Number(saved?.editedAt)||0,pending:Boolean(saved?.pending)};}catch{return {editedAt:0,pending:false};}}
-const initialLocalMeta=readLocalMeta();
-let v=readLocal(),localEditedAt=initialLocalMeta.editedAt,localPending=initialLocalMeta.pending;
+          <article aria-labelledby="custom-title">
+            <div class="section-heading">
+              <span class="step-number">05</span>
+              <div>
+                <p class="section-kicker">Personalize sua conta</p>
+                <h2 id="custom-title">Outros lançamentos</h2>
+              </div>
+            </div>
+            <p class="section-intro">
+              Acrescente outros custos e recursos. A ordem de criação será mantida no relatório.
+            </p>
+            <div class="custom-actions" aria-label="Adicionar lançamento">
+              <button class="button add-debit" id="open-debit" type="button">+ Adicionar débito</button>
+              <button class="button add-credit" id="open-credit" type="button">+ Adicionar crédito</button>
+            </div>
+            <form class="custom-form" id="custom-form" hidden novalidate>
+              <div class="custom-form-head">
+                <strong id="custom-form-title">Novo lançamento</strong>
+                <button class="icon-button" id="cancel-custom" type="button" aria-label="Fechar formulário">×</button>
+              </div>
+              <label class="form-field">
+                <span>Tipo</span>
+                <select id="custom-type">
+                  <option value="debit">Débito — custo</option>
+                  <option value="credit">Crédito — recurso</option>
+                </select>
+              </label>
+              <label class="form-field custom-name-field">
+                <span>Descrição</span>
+                <input
+                  id="custom-name"
+                  type="text"
+                  maxlength="80"
+                  autocomplete="off"
+                  placeholder="Ex.: móveis planejados"
+                />
+              </label>
+              <label class="form-field">
+                <span>Valor</span>
+                <div class="money-field">
+                  <span>R$</span>
+                  <input id="custom-amount" type="text" inputmode="decimal" autocomplete="off" placeholder="0,00" />
+                </div>
+              </label>
+              <button class="button primary custom-submit" type="submit">Adicionar ao cálculo</button>
+              <p class="form-error" id="custom-error" role="alert" hidden></p>
+            </form>
+            <div class="custom-list" id="custom-list">
+              <p class="custom-empty">Nenhum lançamento adicional.</p>
+            </div>
+            <div class="stage-footer final-stage">
+              <div class="stage-metrics">
+                <span>Movimento dos adicionais</span>
+                <output id="custom-movement"></output>
+              </div>
+              <div class="stage-metrics emphasis">
+                <span>Saldo final</span>
+                <output id="custom-balance"></output>
+              </div>
+            </div>
+          </article>
+        </section>
 
-function setStatus(text,state='local'){saveStatus.textContent=text;saveStatus.dataset.state=state;}
-function saveLocal(markEdited=false){if(markEdited){localEditedAt=Date.now();localPending=true;}try{localStorage.setItem(localKey,JSON.stringify(v));localStorage.setItem(localMetaKey,JSON.stringify({editedAt:localEditedAt,pending:localPending}));}catch{}if(!currentUser)setStatus('Salvo neste navegador','local');}
-function markCloudSynced(syncedAt=Date.now()){localEditedAt=syncedAt||Date.now();localPending=false;saveLocal();}
-function calculate(s){const total=s.price+s.renovation+s.registry,relatives=s.family1+s.family2;return {total,relatives,required:Math.max(0,total-s.bank-relatives),balance:s.own+s.bank+relatives-total};}
-function applyValues(values,shouldPersist=true,syncedAt=0){v=normalizeValues(values);update();if(shouldPersist){scheduleCloudSave();return;}if(syncedAt)markCloudSynced(syncedAt);else saveLocal();}
-function scheduleCloudSave(){saveLocal(true);if(!firebaseApi||!currentUser)return;clearTimeout(saveTimer);setStatus('Salvando…','pending');saveTimer=setTimeout(saveCurrentToCloud,700);}
+        <aside id="report" aria-label="Relatório do cenário">
+          <div id="share-report" class="share-report" aria-label="Resumo financeiro do cenário">
+            <div class="summary">
+              <div class="summary-top">
+                <span>SEU CENÁRIO</span>
+                <span aria-hidden="true">↗</span>
+              </div>
+              <p class="result-label" id="result-label">Valor que ainda falta</p>
+              <output class="hero-number" id="required"></output>
+              <p class="result-help" id="result-help"></p>
+              <div class="rule"></div>
+              <div class="report-ledger" id="breakdown"></div>
+              <div class="balance">
+                <span id="balance-label"></span>
+                <strong id="balance"></strong>
+                <small id="available"></small>
+              </div>
+            </div>
+            <div class="composition">
+              <h2>De onde vêm os recursos</h2>
+              <div class="stack" id="stack" aria-label="Composição dos recursos"></div>
+              <div id="legend"></div>
+            </div>
+          </div>
+          <div class="share-actions">
+            <button class="button share-button" id="share-whatsapp" type="button" aria-describedby="share-feedback">
+              Compartilhar relatório no WhatsApp
+            </button>
+            <button class="button download-button" id="download-image" type="button">Baixar imagem 4K</button>
+            <p class="share-feedback" id="share-feedback" role="status" aria-live="polite"></p>
+          </div>
+          <p class="footnote">
+            Empréstimos continuam sendo dívidas a devolver. Esta simulação não inclui juros, parcelas, impostos ou despesas que você não informou.
+          </p>
+        </aside>
+      </div>
 
-fields.forEach(([key,label,max])=>{document.getElementById(key==='price'||key==='bank'?'purchase':'resources').insertAdjacentHTML('beforeend','<div class="field"><div class="field-top"><label for="'+key+'">'+label+'</label><div class="number"><span>R$</span><input id="'+key+'" type="number" min="0" max="100000000" step="0.01"></div></div><input type="range" id="'+key+'-range" aria-label="'+label+'" min="0" max="'+max+'" step="500"><div class="range-label"><span id="'+key+'-hint">Arraste ou digite o valor</span><span id="'+key+'-max"></span></div></div>');
-for(const id of [key,key+'-range'])document.getElementById(id).addEventListener('input',event=>{const number=Number(event.target.value);if(!Number.isFinite(number))return;v[key]=clampValue(key,number);update(id);scheduleCloudSave();});});
+      <article class="scenario-panel" aria-labelledby="scenario-title">
+        <div class="section-heading">
+          <span class="step-number">06</span>
+          <div>
+            <p class="section-kicker">Compare alternativas</p>
+            <h2 id="scenario-title">Cenários salvos</h2>
+          </div>
+        </div>
+        <p class="scenario-intro" id="cloud-help">
+          Entre com sua conta para salvar cenários no Firebase e acessá-los em outros aparelhos.
+        </p>
+        <div class="auth-form" id="auth-form">
+          <label class="sr-only" for="login-email">E-mail</label>
+          <input id="login-email" type="email" autocomplete="username" placeholder="E-mail" />
+          <label class="sr-only" for="login-password">Senha</label>
+          <input id="login-password" type="password" autocomplete="current-password" placeholder="Senha" />
+          <button class="button primary" id="login" type="button">Entrar</button>
+        </div>
+        <p class="auth-error" id="auth-error" role="alert" hidden></p>
+        <div class="scenario-form">
+          <label class="sr-only" for="scenario-name">Nome do cenário</label>
+          <input
+            class="scenario-name"
+            id="scenario-name"
+            maxlength="80"
+            placeholder="Nome do cenário, por exemplo: Proposta final"
+          />
+          <button class="button primary" id="save-scenario" type="button" disabled>Salvar cenário</button>
+        </div>
+        <div class="scenario-list" id="scenario-list">
+          <p class="scenario-empty">Seus cenários aparecerão aqui.</p>
+        </div>
+      </article>
 
-function update(active){fields.forEach(([key,label,max])=>{const numberInput=document.getElementById(key),rangeInput=document.getElementById(key+'-range');rangeInput.max=Math.max(max,v[key]);if(active!==key)numberInput.value=v[key];if(active!==key+'-range')rangeInput.value=v[key];document.getElementById(key+'-max').textContent=money(Number(rangeInput.max));});
-const c=calculate(v),purchaseGap=v.price-v.bank;document.getElementById('note').textContent=purchaseGap>0?'O financiamento cobre '+money(v.bank)+' do preço do imóvel. Restam '+money(purchaseGap)+' para cobrir com outros recursos.':purchaseGap<0?'O financiamento informado ultrapassa o preço do imóvel em '+money(Math.abs(purchaseGap))+'. Revise os valores.':'O financiamento informado cobre integralmente o preço do imóvel.';
-document.getElementById('required').textContent=money(c.required);
-document.getElementById('breakdown').innerHTML=[['Apartamento',v.price],['Reforma',v.renovation],['Cartório',v.registry],['Custo total',c.total],['Banco',-v.bank],['Parentes 1 + 2',-c.relatives]].map(([label,number])=>'<div class="line"><span>'+label+'</span><strong>'+money(number)+'</strong></div>').join('');
-document.getElementById('balance-label').textContent=c.balance<0?'Ainda faltam recursos':c.balance>0?'Sobra de recursos':'Recursos suficientes';
-document.getElementById('balance').textContent=money(Math.abs(c.balance));document.getElementById('available').textContent='Considerando seus '+money(v.own)+' disponíveis.';
-const parts=[['Banco',v.bank],['Parentes',c.relatives],['Recursos próprios',v.own],['Valor a cobrir',Math.max(0,-c.balance)]];
-document.getElementById('stack').innerHTML=parts.map(([label,number],i)=>'<div style="flex:'+number+';background:'+colors[i]+'"></div>').join('');
-document.getElementById('legend').innerHTML=parts.map(([label,number],i)=>'<div class="legend"><span><i style="background:'+colors[i]+'"></i>'+label+'</span><strong>'+money(number)+'</strong></div>').join('');}
+      <footer>
+        <strong>MEU TRIPLEX</strong>
+        <span>Simule hoje. Planeje o próximo passo.</span>
+      </footer>
+    </main>
 
-function loadHtml2Canvas(){if(window.html2canvas)return Promise.resolve(window.html2canvas);if(html2CanvasPromise)return html2CanvasPromise;html2CanvasPromise=new Promise((resolve,reject)=>{const script=document.createElement('script');script.src='https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';script.crossOrigin='anonymous';script.onload=()=>window.html2canvas?resolve(window.html2canvas):reject(new Error('Biblioteca de imagem indisponível'));script.onerror=()=>reject(new Error('Não foi possível carregar a biblioteca de imagem'));document.head.appendChild(script);}).catch(error=>{html2CanvasPromise=null;throw error;});return html2CanvasPromise;}
-function canvasToBlob(canvas){return new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('Não foi possível criar a imagem')),'image/png'));}
-function downloadReportImage(blob,fileName){const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=fileName;document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);}
-async function createReportImage4k(){const html2canvas=await loadHtml2Canvas(),stage=document.createElement('div'),clone=shareReport.cloneNode(true);clone.removeAttribute('id');clone.querySelectorAll('[id]').forEach(element=>element.removeAttribute('id'));stage.className='share-export-stage';stage.setAttribute('aria-hidden','true');Object.assign(stage.style,{position:'fixed',left:'-10000px',top:'0',width:'540px',height:'960px',padding:'32px',background:'#f3f6fb',display:'flex',alignItems:'center',boxSizing:'border-box',overflow:'hidden',zIndex:'-9999'});Object.assign(clone.style,{width:'100%',margin:'0'});stage.appendChild(clone);document.body.appendChild(stage);try{if(document.fonts?.ready)await document.fonts.ready;await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));const canvas=await html2canvas(stage,{scale:4,width:540,height:960,backgroundColor:'#f3f6fb',useCORS:true,logging:false});return await canvasToBlob(canvas);}finally{stage.remove();}}
-async function copyReportImage(blob){if(!navigator.clipboard||!window.ClipboardItem)return false;try{await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);return true;}catch{return false;}}
-async function shareReportOnWhatsApp(){const originalLabel=shareButton.textContent;shareButton.disabled=true;shareButton.setAttribute('aria-busy','true');shareButton.textContent='Gerando imagem 4K…';shareFeedback.textContent='Preparando o relatório em 2160 × 3840 pixels.';try{const blob=await createReportImage4k(),fileName='meu-triplex-cenario-4k.png',file=new File([blob],fileName,{type:'image/png'}),shareData={title:'Meu Triplex',text:'Meu cenário financeiro do triplex.',files:[file]};if(navigator.share&&navigator.canShare?.({files:[file]})){try{await navigator.share(shareData);shareFeedback.textContent='Imagem 4K compartilhada.';return;}catch(error){if(error?.name==='AbortError'){shareFeedback.textContent='';return;}}}downloadReportImage(blob,fileName);const copied=await copyReportImage(blob),message=copied?'Meu cenário do Triplex está pronto. A imagem foi copiada; cole-a nesta conversa.':'Meu cenário do Triplex está pronto. Anexe o arquivo meu-triplex-cenario-4k.png que foi baixado.';shareFeedback.textContent=copied?'Imagem 4K copiada e baixada. Cole-a na conversa do WhatsApp.':'Imagem 4K baixada. Anexe o arquivo na conversa do WhatsApp.';const whatsappUrl='https://wa.me/?text='+encodeURIComponent(message),opened=window.open(whatsappUrl,'_blank');if(opened)opened.opener=null;else window.location.href=whatsappUrl;}catch(error){shareFeedback.textContent='Não foi possível gerar a imagem. Verifique sua conexão e tente novamente.';console.error(error);}finally{shareButton.disabled=false;shareButton.removeAttribute('aria-busy');shareButton.textContent=originalLabel;}}
+    <div class="mobile-balance-bar" id="mobile-balance-bar" aria-live="polite">
+      <div>
+        <span id="mobile-balance-label">Ainda faltam</span>
+        <strong id="mobile-balance"></strong>
+      </div>
+      <button id="mobile-report" type="button">Ver relatório</button>
+    </div>
 
-function firebaseErrorMessage(error){const code=String(error?.code||'');if(code.includes('invalid-credential')||code.includes('wrong-password')||code.includes('user-not-found'))return 'E-mail ou senha incorretos.';if(code.includes('invalid-email'))return 'Digite um endereço de e-mail válido.';if(code.includes('too-many-requests'))return 'Muitas tentativas. Aguarde um pouco e tente novamente.';if(code.includes('operation-not-allowed'))return 'Ative o login por e-mail e senha no Firebase Authentication.';if(code.includes('permission-denied'))return 'Publique as regras do Firestore para liberar seus dados.';return 'Não foi possível conectar ao Firebase.';}
-function showFirebaseError(error){const message=firebaseErrorMessage(error);setStatus('Erro de sincronização','error');cloudHelp.textContent=message;authError.textContent=message;authError.hidden=false;console.error(error);}
-function cloudDocument(values,name='Cálculo atual',kind='current'){return {...normalizeValues(values),name,kind,updatedAt:firebaseApi.serverTimestamp()};}
-async function saveCurrentToCloud(){if(!firebaseApi||!currentUser)return;const uid=currentUser.uid;try{await firebaseApi.setDoc(firebaseApi.doc(firebaseApi.db,'triplexUsers',uid,'simulations','current'),cloudDocument(v),{merge:true});if(currentUser?.uid===uid){markCloudSynced();setStatus('Salvo no Firebase','cloud');}}catch(error){showFirebaseError(error);}}
-async function loadCurrentFromCloud(){if(!firebaseApi||!currentUser)return;const uid=currentUser.uid;const reference=firebaseApi.doc(firebaseApi.db,'triplexUsers',uid,'simulations','current');try{const snapshot=await firebaseApi.getDoc(reference);if(currentUser?.uid!==uid)return;if(snapshot.exists()){const data=snapshot.data(),cloudUpdatedAt=typeof data.updatedAt?.toMillis==='function'?data.updatedAt.toMillis():0;if(localPending&&localEditedAt>cloudUpdatedAt){await saveCurrentToCloud();}else{applyValues(data,false,cloudUpdatedAt);setStatus('Sincronizado com o Firebase','cloud');}}else{await saveCurrentToCloud();}}catch(error){showFirebaseError(error);}}
-
-function renderScenarios(items=[]){scenarioCache=new Map(items.map(item=>[item.id,item]));scenarioList.replaceChildren();if(!items.length){const empty=document.createElement('p');empty.className='scenario-empty';empty.textContent=currentUser?'Nenhum cenário salvo ainda.':'Entre com seu e-mail para ver seus cenários.';scenarioList.appendChild(empty);return;}
-for(const item of items){const row=document.createElement('div');row.className='scenario-item';const description=document.createElement('div');const title=document.createElement('strong');title.className='scenario-name-text';title.textContent=item.name;const meta=document.createElement('span');meta.className='scenario-meta';meta.textContent=money(item.values.price)+(item.updatedAt?' · '+new Date(item.updatedAt).toLocaleString('pt-BR'):'');description.append(title,meta);const actions=document.createElement('div');actions.className='scenario-actions';const loadButton=document.createElement('button');loadButton.type='button';loadButton.textContent='Carregar';loadButton.addEventListener('click',()=>applyValues(item.values));const deleteButton=document.createElement('button');deleteButton.type='button';deleteButton.className='danger';deleteButton.textContent='Excluir';deleteButton.addEventListener('click',()=>deleteScenario(item.id,item.name));actions.append(loadButton,deleteButton);row.append(description,actions);scenarioList.appendChild(row);}}
-async function refreshScenarios(){if(!firebaseApi||!currentUser){renderScenarios();return;}const uid=currentUser.uid;try{const snapshot=await firebaseApi.getDocs(firebaseApi.collection(firebaseApi.db,'triplexUsers',uid,'simulations'));if(currentUser?.uid!==uid)return;const items=[];snapshot.forEach(documentSnapshot=>{const data=documentSnapshot.data();if(documentSnapshot.id==='current'||data.kind!=='saved')return;const timestamp=typeof data.updatedAt?.toMillis==='function'?data.updatedAt.toMillis():0;items.push({id:documentSnapshot.id,name:String(data.name||'Cenário sem nome'),values:normalizeValues(data),updatedAt:timestamp});});items.sort((a,b)=>b.updatedAt-a.updatedAt);renderScenarios(items);}catch(error){showFirebaseError(error);}}
-async function saveNamedScenario(){if(!firebaseApi||!currentUser)return;const name=scenarioName.value.trim()||('Cenário de '+new Date().toLocaleString('pt-BR'));saveScenarioButton.disabled=true;setStatus('Salvando cenário…','pending');try{const payload={...cloudDocument(v,name,'saved'),createdAt:firebaseApi.serverTimestamp()};await firebaseApi.addDoc(firebaseApi.collection(firebaseApi.db,'triplexUsers',currentUser.uid,'simulations'),payload);scenarioName.value='';await refreshScenarios();setStatus('Cenário salvo','cloud');}catch(error){showFirebaseError(error);}finally{saveScenarioButton.disabled=!currentUser;}}
-async function deleteScenario(id,name){if(!firebaseApi||!currentUser||!confirm('Excluir o cenário “'+name+'”?'))return;try{await firebaseApi.deleteDoc(firebaseApi.doc(firebaseApi.db,'triplexUsers',currentUser.uid,'simulations',id));await refreshScenarios();setStatus('Cenário excluído','cloud');}catch(error){showFirebaseError(error);}}
-
-async function handleAuthState(user){currentUser=user;clearTimeout(saveTimer);if(!user){authButton.textContent='☁ Entrar';authButton.dataset.signedIn='false';authForm.hidden=false;saveScenarioButton.disabled=true;cloudHelp.textContent='Entre com sua conta para salvar cenários no Firebase e acessá-los em outros aparelhos.';renderScenarios();setStatus('Salvo neste navegador','local');return;}authButton.textContent='Sair';authButton.dataset.signedIn='true';authForm.hidden=true;authError.hidden=true;loginPassword.value='';saveScenarioButton.disabled=false;cloudHelp.textContent='Conectado como '+(user.email||'usuário')+'. Cada alteração é salva automaticamente.';setStatus('Sincronizando…','pending');await loadCurrentFromCloud();await refreshScenarios();}
-function hasFirebaseConfig(config){return Boolean(config&&['apiKey','authDomain','projectId','appId'].every(key=>typeof config[key]==='string'&&config[key].trim()&&!config[key].includes('COLE_')));}
-async function startFirebase(){if(firebaseStarting||firebaseApi)return;const config=window.FIREBASE_CONFIG;if(!hasFirebaseConfig(config)){authButton.disabled=true;authButton.textContent='Firebase não configurado';authForm.hidden=true;cloudHelp.textContent='A configuração do aplicativo Firebase ainda precisa ser adicionada.';return;}firebaseStarting=true;authButton.disabled=true;loginButton.disabled=true;setStatus('Conectando ao Firebase…','pending');try{const base='https://www.gstatic.com/firebasejs/'+sdkVersion+'/';const [appModule,authModule,storeModule]=await Promise.all([import(base+'firebase-app.js'),import(base+'firebase-auth.js'),import(base+'firebase-firestore.js')]);const app=appModule.initializeApp(config);const auth=authModule.getAuth(app);await authModule.setPersistence(auth,authModule.browserLocalPersistence);const db=storeModule.getFirestore(app);firebaseApi={auth,db,signInWithEmailAndPassword:authModule.signInWithEmailAndPassword,signOut:authModule.signOut,onAuthStateChanged:authModule.onAuthStateChanged,doc:storeModule.doc,setDoc:storeModule.setDoc,getDoc:storeModule.getDoc,collection:storeModule.collection,addDoc:storeModule.addDoc,getDocs:storeModule.getDocs,deleteDoc:storeModule.deleteDoc,serverTimestamp:storeModule.serverTimestamp};firebaseApi.onAuthStateChanged(auth,user=>void handleAuthState(user),showFirebaseError);authButton.disabled=false;loginButton.disabled=false;}catch(error){firebaseStarting=false;authButton.disabled=false;loginButton.disabled=false;showFirebaseError(error);}}
-
-async function signIn(){if(!firebaseApi){await startFirebase();if(!firebaseApi)return;}const email=loginEmail.value.trim(),password=loginPassword.value;if(!email||!password){authError.textContent='Digite seu e-mail e sua senha.';authError.hidden=false;return;}loginButton.disabled=true;authError.hidden=true;setStatus('Entrando…','pending');try{await firebaseApi.signInWithEmailAndPassword(firebaseApi.auth,email,password);}catch(error){showFirebaseError(error);}finally{loginButton.disabled=false;}}
-authButton.addEventListener('click',async()=>{if(currentUser&&firebaseApi){authButton.disabled=true;try{await firebaseApi.signOut(firebaseApi.auth);}catch(error){showFirebaseError(error);}finally{authButton.disabled=false;}return;}authForm.hidden=false;authForm.scrollIntoView({behavior:'smooth',block:'center'});loginEmail.focus();});
-loginButton.addEventListener('click',signIn);
-loginPassword.addEventListener('keydown',event=>{if(event.key==='Enter')signIn();});
-saveScenarioButton.addEventListener('click',saveNamedScenario);
-scenarioName.addEventListener('keydown',event=>{if(event.key==='Enter'&&!saveScenarioButton.disabled)saveNamedScenario();});
-shareButton.addEventListener('click',shareReportOnWhatsApp);
-document.getElementById('reset').addEventListener('click',()=>applyValues(initial));
-window.addEventListener('pagehide',saveLocal);
-update();saveLocal();startFirebase();
-</script></html>
-
+    <noscript>Ative o JavaScript para usar o simulador.</noscript>
+    <script src="firebase-config.js"></script>
+    <script src="app.js?v=3" defer></script>
+  </body>
+</html>
