@@ -10,14 +10,59 @@ service cloud.firestore {
       return value is number && value >= 0 && value <= 100000000;
     }
 
+    function validLine(line) {
+      return line is map
+        && line.keys().hasAll(['id', 'label', 'type', 'amount'])
+        && line.keys().hasOnly(['id', 'label', 'type', 'amount'])
+        && line.id is string && line.id.size() > 0 && line.id.size() <= 120
+        && line.label is string && line.label.size() > 0 && line.label.size() <= 80
+        && line.type in ['debit', 'credit'] && validMoney(line.amount);
+    }
+
+    function validLines(rows) {
+      return rows is list && rows.size() <= 30
+        && (rows.size() <= 0 || validLine(rows[0]))
+        && (rows.size() <= 1 || validLine(rows[1]))
+        && (rows.size() <= 2 || validLine(rows[2]))
+        && (rows.size() <= 3 || validLine(rows[3]))
+        && (rows.size() <= 4 || validLine(rows[4]))
+        && (rows.size() <= 5 || validLine(rows[5]))
+        && (rows.size() <= 6 || validLine(rows[6]))
+        && (rows.size() <= 7 || validLine(rows[7]))
+        && (rows.size() <= 8 || validLine(rows[8]))
+        && (rows.size() <= 9 || validLine(rows[9]))
+        && (rows.size() <= 10 || validLine(rows[10]))
+        && (rows.size() <= 11 || validLine(rows[11]))
+        && (rows.size() <= 12 || validLine(rows[12]))
+        && (rows.size() <= 13 || validLine(rows[13]))
+        && (rows.size() <= 14 || validLine(rows[14]))
+        && (rows.size() <= 15 || validLine(rows[15]))
+        && (rows.size() <= 16 || validLine(rows[16]))
+        && (rows.size() <= 17 || validLine(rows[17]))
+        && (rows.size() <= 18 || validLine(rows[18]))
+        && (rows.size() <= 19 || validLine(rows[19]))
+        && (rows.size() <= 20 || validLine(rows[20]))
+        && (rows.size() <= 21 || validLine(rows[21]))
+        && (rows.size() <= 22 || validLine(rows[22]))
+        && (rows.size() <= 23 || validLine(rows[23]))
+        && (rows.size() <= 24 || validLine(rows[24]))
+        && (rows.size() <= 25 || validLine(rows[25]))
+        && (rows.size() <= 26 || validLine(rows[26]))
+        && (rows.size() <= 27 || validLine(rows[27]))
+        && (rows.size() <= 28 || validLine(rows[28]))
+        && (rows.size() <= 29 || validLine(rows[29]));
+    }
+
     function validSimulation() {
       return request.resource.data.keys().hasAll([
           'price', 'entry', 'bank', 'own', 'renovation', 'registry',
-          'family1', 'family2', 'name', 'kind', 'updatedAt'
+          'family1', 'family2', 'saleEntry', 'brokerage', 'customRows',
+          'schemaVersion', 'name', 'kind', 'updatedAt'
         ])
         && request.resource.data.keys().hasOnly([
           'price', 'entry', 'bank', 'own', 'renovation', 'registry',
-          'family1', 'family2', 'name', 'kind', 'updatedAt', 'createdAt'
+          'family1', 'family2', 'saleEntry', 'brokerage', 'customRows',
+          'schemaVersion', 'name', 'kind', 'updatedAt', 'createdAt'
         ])
         && validMoney(request.resource.data.price)
         && request.resource.data.entry is number
@@ -29,6 +74,11 @@ service cloud.firestore {
         && validMoney(request.resource.data.registry)
         && validMoney(request.resource.data.family1)
         && validMoney(request.resource.data.family2)
+        && validMoney(request.resource.data.saleEntry)
+        && validMoney(request.resource.data.brokerage)
+        && validLines(request.resource.data.customRows)
+        && request.resource.data.customRows.size() <= 30
+        && request.resource.data.schemaVersion == 3
         && request.resource.data.name is string
         && request.resource.data.name.size() > 0
         && request.resource.data.name.size() <= 80
@@ -60,4 +110,3 @@ service cloud.firestore {
     }
   }
 }
-
